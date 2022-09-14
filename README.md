@@ -4,7 +4,7 @@ Before perform of new homework assignment merge top commit of main branch in you
 
 # Development installation
 
-Just use
+Just use (made env.yml file before)
 
 '''
 conda env create -f env.yml 
