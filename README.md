@@ -7,7 +7,7 @@ Before perform of new homework assignment merge top commit of main branch in you
 Just use
 
 '''
-conda create -- ENV_NAME
+conda create --name ENV_NAME
 '''
 
 then run it  by 
