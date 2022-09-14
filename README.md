@@ -7,13 +7,17 @@ Before perform of new homework assignment merge top commit of main branch in you
 Just use
 
 '''
+<<<<<<< HEAD
+conda env create -f env.yml 
+=======
 conda create --name ENV_NAME
+>>>>>>> origin/main
 '''
 
 then run it  by 
 
 '''
-conda activate ENV_NAME
+conda activate stem_env
 '''
 
 If there's need to  install in editable mode:
