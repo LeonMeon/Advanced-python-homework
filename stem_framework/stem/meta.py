@@ -11,7 +11,7 @@ from .core import Dataclass
 from typing import Optional, Any, Union
 
 #Meta --- union of the dict and the Dataclass type.
-Meta : Union[dict, Dataclass]
+Meta = Union[dict, Dataclass]
 
 #Specification field type SpecificationField --- pairs of necessary meta key and necessary meta value type (this can be single type, tuple of types, or another specification if meta value is another Meta)
 SpecificationField = dict[Meta, Union[Any, tuple[Any, ...]], dict[Meta, Union[Any, tuple[Any, ...]]]]
@@ -33,16 +33,6 @@ class MetaFieldError:
     presented_value: Any = None
 
 
-#3.(1 p.) get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]: which return meta value by key from top level of meta or default if key don't exist in meta
-def get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]:
-    if hasattr(meta, key):
-        return getattr(meta, key)
-    return default
-
-#4.(1 p.) function def update_meta(meta: Meta, **kwargs): which update meta from kwargs.
-def update_meta(meta: Meta, **kwargs):
-    for key in kwargs:
-        setattr(meta, key, kwargs[key])  
         
 #5.(6 p.) this class contains result of meta verification.
 #It contains list of instance of dataclass MetaFieldError or another MetaVerification in the field errors:
@@ -55,16 +45,34 @@ class MetaVerification:
     #returns True if there is no errors of verification.
     @property
     def checked_success(self):
+        return None
         if no_errors:
             return True
         else:
             return False
         
     # verify meta by specification. Raise SpecificationError if verification impossible.
+    #Metadata verification: each task has Specification which describes required meta and the metadata processor checks input meta the correspondence to the specification.
+    
     @staticmethod
     def verify(meta: Meta,
                specification: Optional[Specification] = None) -> "MetaVerification":
         try:
-            
+            return None
+            if isinstance(specification, tuple):
+                print('Turple')
+            else:
+                print('Meta type')            
         except:
             raise SpecificationError
+
+#3.(1 p.) get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]: which return meta value by key from top level of meta or default if key don't exist in meta
+def get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]:
+    if hasattr(meta, key):
+        return getattr(meta, key)
+    return default
+
+#4.(1 p.) function def update_meta(meta: Meta, **kwargs): which update meta from kwargs.
+def update_meta(meta: Meta, **kwargs):
+    for key in kwargs:
+        setattr(meta, key, kwargs[key])  
