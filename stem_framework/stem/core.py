@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional , Protocol
 from dataclasses import dataclass
 
 # hw2 6 part 1
@@ -18,5 +18,5 @@ class Named:
 #hw2 1
 #a protocol  as a type annotation for a dataclass object.
 @dataclass(eq=True, frozen=True)
-class Dataclass:
+class Dataclass(Protocol):
     __dataclass_fields__: Any

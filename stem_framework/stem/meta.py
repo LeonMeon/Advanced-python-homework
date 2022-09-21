@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import Optional, Any, Union
 
 #Meta --- union of the dict and the Dataclass type.
-Meta : Union[dict, type(Dataclass)] 
+Meta : Union[dict, typing._ProtocolMeta] 
 
 #Specification field type SpecificationField --- pairs of necessary meta key and necessary meta value type (this can be single type, tuple of types, or another specification if meta value is another Meta)
 SpecificationField :
