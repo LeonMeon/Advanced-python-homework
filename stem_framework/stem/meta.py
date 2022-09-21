@@ -45,7 +45,6 @@ class MetaVerification:
     #returns True if there is no errors of verification.
     @property
     def checked_success(self):
-        return None
         if len(self.error) == 0:
             return True
         else:
@@ -57,14 +56,14 @@ class MetaVerification:
     @staticmethod
     def verify(meta: Meta,
                specification: Optional[Specification] = None) -> "MetaVerification":
-        try:
-            return None
-            if isinstance(specification, tuple):
-                print('Turple')
-            else:
-                print('Meta type')            
-        except:
-            raise SpecificationError
+        for meta_value , spec_value in zip(meta.values(), specification.values())
+            try:
+                if isinstance(meta_value in, spec_value):
+                    print(spec_value)
+                else:
+                    print(type(meta_value))            
+            except:
+                raise SpecificationError
 
 #3.(1 p.) get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]: which return meta value by key from top level of meta or default if key don't exist in meta
 def get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]:
