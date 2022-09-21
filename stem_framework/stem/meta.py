@@ -46,7 +46,7 @@ class MetaVerification:
     @property
     def checked_success(self):
         return None
-        if no_errors:
+        if len(self.error) == 0:
             return True
         else:
             return False
