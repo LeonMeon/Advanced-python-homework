@@ -12,6 +12,7 @@ from .meta import Specification, Meta
 '''
 
 T = TypeVar("T")
+
 class Task(ABC, Generic[T], Named):
     dependencies: Tuple[Union[str, "Task"], ...]
     specification: Optional[Specification] = None
@@ -90,7 +91,7 @@ class MapTask(Task[Iterator[T]]):
         self.dependencies = dependence
 
     def transform(self, meta: Meta, /, **kwargs: Any) -> T:
-        return map(self._func, *(kwargs.values()))
+        return map(self._func, kwargs[self.dependencies]) # corrected
 
 #4 (1p.)
 #filter iterated dependence using key function
@@ -101,7 +102,7 @@ class FilterTask(Task[Iterator[T]]):
         self.dependencies = dependence
 
     def transform(self, meta: Meta, /, **kwargs: Any) -> T:
-        return filter(self._func, *(kwargs.values()))
+        return filter(self._func, kwargs[self.dependencies]) # corrected
 
 #5 (1p.)
 # reduce iterated dependence using func function.
@@ -112,7 +113,7 @@ class ReduceTask(Task[Iterator[T]]):
         self.dependencies = dependence
 
     def transform(self, meta: Meta, /, **kwargs: Any) -> T:
-        return reduce(self._func, *(kwargs.values()))
+        return reduce(self._func, kwargs[self.dependencies]) # corrected
 
 
 
