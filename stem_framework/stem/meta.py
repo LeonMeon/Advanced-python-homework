@@ -95,13 +95,16 @@ class MetaVerification:
 
 #3.(1 p.) get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]: which return meta value by key from top level of meta or default if key don't exist in meta
 def get_meta_attr(meta : Meta, key : str, default : Optional[Any] = None) -> Optional[Any]:
-    if hasattr(meta, key):
+    try:
         return getattr(meta, key)
+    else:
+        return default
+    
     try:
         return meta.get(key,default)
     except:
-        return None
-    return default
+        return default
+    
 
 #4.(1 p.) function def update_meta(meta: Meta, **kwargs): which update meta from kwargs.
 def update_meta(meta: Meta, **kwargs):

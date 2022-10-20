@@ -35,6 +35,7 @@ class FunctionTask(Task[T]):
         self.dependencies = dependencies
         self.specification = specification
         self.settings = settings
+        
 
     def __call__(self, *args, **kwargs):
         return self._func(*args, **kwargs)
@@ -69,20 +70,22 @@ class FunctionDataTask(DataTask[T]):
     def data(self, meta: Meta) -> T:
         return self._func(meta)
     
-#1 (2p.)
 #wrap user function as FunctionDataTask object
 def data(func: Callable[[Meta], T], specification: Optional[Specification] = None, **settings) -> FunctionDataTask[T]:
-    return FunctionDataTask(func.__name__, func, specification, **settings)
+    if func is not None:
+        return FunctionDataTask(func.__name__, func, specification, **settings)
+    else:
+        return lambda func : data(func, specification, **settings)
 
-#2 (3p.)
 #wrap user function as FunctionTask object
 def task(func: Callable[[Meta, ...], T], specification: Optional[Specification] = None, **settings) -> FunctionTask[T]:
-    return FunctionTask(func.__name__,
-                        func,
-                        tuple(i for i in func.__annotations__.keys() if i != 'meta' and i != "return"),
-                        specification,
-                        **settings)
-#3 (1p.)
+    if func is not None:
+        return FunctionTask(func.__name__, func,
+                            tuple(i for i in func.__annotations__.keys() if i not in  ['meta',"return"]),
+                            specification, **settings)
+    else:
+        return lambda func : task(func, specification, **settings)
+
 #apply func for each element of the iterated dependence
 class MapTask(Task[Iterator[T]]):
     def __init__(self, func: Callable, dependence: Union[str, "Task"]):
@@ -97,7 +100,8 @@ class MapTask(Task[Iterator[T]]):
 #filter iterated dependence using key function
 class FilterTask(Task[Iterator[T]]):
     def __init__(self, func: Callable, dependence: Union[str, "Task"]):
-        self._name = "filter_" + dependence.name #return the name of the dependence with the prefix "filter_"
+        #return the name of the dependence with the prefix "filter_"
+        self._name = "filter_" + dependence.name 
         self._func = func
         self.dependencies = dependence
 
@@ -108,7 +112,8 @@ class FilterTask(Task[Iterator[T]]):
 # reduce iterated dependence using func function.
 class ReduceTask(Task[Iterator[T]]):
     def __init__(self, func: Callable, dependence: Union[str, "Task"]):
-        self._name = "reduce_" + dependence.name #return the name of the dependence with the prefix "reduce_"
+        #return the name of the dependence with the prefix "reduce_"
+        self._name = "reduce_" + dependence.name 
         self._func = func
         self.dependencies = dependence
 
