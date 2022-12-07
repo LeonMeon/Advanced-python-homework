@@ -15,7 +15,8 @@ def print_structure(args: argparse.Namespace):
                 pretty(value, indent + 1)
             else:
                 print('\t' * (indent + 1) + str(value))
-    pretty(get_workspace(args).structure())
+                
+    pretty(workspace.structure()) # made it wrong
 
 def run_task(workspace: IWorkspace, args: argparse.Namespace): 
     try:

@@ -6,24 +6,46 @@ google.protobuf.reflection.GeneratedProtocolMessageType
 """
 GeneratedProtocolMessageType = "GeneratedProtocolMessageType"
 
-
+#The first 8 bytes contain a number N;
+#The next N bytes contain a message in the protobuf format
 class ProtoList(Sized, Iterable):
-
+    '''
+    work with a file as a list of protobuf messages 
+    (without loading all messages in memory)
+    Class must open access to data in context manager, and close file on exit from context.
+    '''
     def __init__(self, path, proto_class: Type[GeneratedProtocolMessageType]):
         self.path = path
         self.proto_class = proto_class
 
-    def __enter__(self):
-        pass  # TODO(Assignment 8)
+    def __enter__(self) -> "ProtoList":
+        self.file = open(self.path, 'rb')    
+        self.lengths, self.inds  = [], []
+        
+        N_byte = int.from_bytes(self.file.read(8))
+        while N_byte != b'':
+            
+            self.inds.append(self.file.tell())
+            
+            N_int = int.from_bytes(N_byte)
+            self.lengths.append(N_int)
+            self.file.seek(N_int, 1)
+            
+            N_byte = self.file.read(8)
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        pass  # TODO(Assignment 8)
+        self.file.__exit__(exc_type, exc_val, exc_tb)
 
-    def __len__(self):
-        pass  # TODO(Assignment 8)
+    def __len__(self) -> int:
+        return len(self.lengths)
 
     def __getitem__(self, item):
-        pass  # TODO(Assignment 8)
+        self.file.seek(self.inds[item])
+        N_int = self.lengths[item]
+        message = self.file.read(N_int)
+        return self.proto_class().ParseFromString(message)
 
     def __iter__(self) -> Iterator[GeneratedProtocolMessageType]:
-        pass  # TODO(Assignment 8)
+        for i in range(len(self)):
+            yield self[i]
